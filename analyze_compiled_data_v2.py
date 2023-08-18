@@ -14,18 +14,14 @@ from datetime import datetime
 def main():
     """
     Runs square wave best-fit response time analysis on timestamp test data compiled by Mobile Data Compiler.
-    Uses command line arguments to indicate test name and differentiate between sub-tests.
+    Uses command line arguments to ingest test name and differentiate between sub-tests.
         Test names are dates formatted YYYYMMDD. Sub-test pulse log suffixes can be input using the 'subtest_extension' argument.
         Pulse logs must be stored in the following folder within the working directory: data/{test_name}/Pulse_Log.
             Pulse logs are named {test_name}_log{subtest_extension}.csv
         Data is read from local Mobile Data Compiler directory, identified by test_name.
         The names of instrument parameters that will be analyzed are read from the "Parameters List.txt" file in the working directory. 
-    Generates the following figures:
-        1) figure with subplots illustrating timestamp test data and peak times for all instruments,
-        2) figure with subplots illustrating probability distributions of response times for all instruments,
-        3) figure with subplots containing data with square wave best-fit superimposed and best-fit response times indicated by red dots,
-        4) figure with subplots containing data with square wave best-fit superimposed and best-fit response times indicated by red dots,
-            peak maxima indicated by black crosses, and 90% maxima indicated by green crosses.
+    Generates a figure with subplots for each instrument displaying
+        test data with square wave best-fit superimposed over data and best-fit response times indicated by red dots.
     Writes a csv file listing the response times (by square wave best-fit) for all instruments.
         Writes file in the following folder within the working directory: data/{test_name}.
     """
@@ -72,16 +68,18 @@ def main():
     condensed_data_dict = ttt.generate_condensed_data(data_dict, pulse_log)
     print('Data condensed to pulse period.\n')
 
-    # Make plots.
+    # Run analysis and make plots.
 
+    # Run square wave best fit analysis and generate lists of peak times for each instrument.
     # Plot data with peak times indicated. Plot probability distributions of response times.
-    fig2, fig3, data_peaks_dict = ttt.plot_data_with_peaks(condensed_data_dict, pulse_log, pulse_time)
+    fig01, fig02, data_peaks_dict = ttt.plot_data_with_peaks(condensed_data_dict, pulse_log, pulse_time)
 
+    # Close the plots because we don't need them.
     plt.close()
     plt.close()
 
     # Plot square wave best-fit data.
-    fig1 = ttt.plot_best_fit_and_t0(condensed_data_dict, pulse_log, pulse_time)
+    fig = ttt.plot_best_fit_and_t0(condensed_data_dict, pulse_log, pulse_time)
 
     # Print and write response time data.
     data_peaks_df = pd.DataFrame(data_peaks_dict) 
