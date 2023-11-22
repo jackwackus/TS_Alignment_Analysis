@@ -1,0 +1,7 @@
+42iQ_a_NOx=42iQ NOx Conc
+G2401_a_CO=G2401 CO Conc
+PTR_Ethylene Conc=PTR Ethylene Conc
+PTR_Benzene Conc=PTR Benzene Conc
+OPS_TotConc=OPS Total PM Conc
+FMPS_TotConc=FMPS Total PM Conc
+AE33_a_BC6=AE33 BC Conc

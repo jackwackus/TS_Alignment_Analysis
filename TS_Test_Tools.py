@@ -10,6 +10,27 @@ import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 from scipy.signal import find_peaks, square
 
+def read_config(read_file):
+    """
+    Reads a configuration file and writes data to a dictionary
+    Args:
+        read_file (str): path to configuration text file
+    Returns:
+        config_dic (dict): dictionary containing configuration data
+    """
+    config_dic = {}
+    with open(read_file) as f:
+        for line in f:
+            if line.find('\n') > 0:
+                line = line[:-1]
+            sep = line.find("=")
+            object_name = line[0:sep]
+            if len(object_name) < 1:
+                continue
+            object_value = line[sep+1:]
+            config_dic[object_name] = object_value
+    return config_dic
+
 def read_parameter_list():
     """
     Reads a list of instrument parameter names from a text file. Writes them to a list.
@@ -540,14 +561,7 @@ def plot_best_fit_and_t0(condensed_data_dict, pulse_log, pulse_time):
                 new_vals += [data[index]]
         return new_times, new_vals
 
-    relabel_dict = {
-            '42iQ_a_NOx': '42iQ NOx Conc',
-            'G2401_a_CO': 'G2401 CO Conc',
-            'PTR_Ethylene Conc': 'PTR Ethylene Conc',
-            'OPS_TotConc': 'OPS Total PM Conc',
-            'FMPS_TotConc': 'FMPS Total PM Conc',
-            'AE33_a_BC6': 'AE33 BC Conc'
-            }
+    relabel_dict = read_config('Relabel Dictionary.txt')
 
     dateparser = lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
     pulse_tuples = []
